@@ -1,5 +1,5 @@
 INPUT_FILE = 'data/healthcare_data.csv'
-OUTPUT_DIR = 'output'
+OUTPUT_DIR = 'output/'
 
 COLUMNS = ['Available Extra Rooms in Hospital', 'Department', 'Ward_Facility_Code', 'doctor_name', 'staff_available', 'patientid', 'Age', 'gender', 'Type of Admission', 'Severity of Illness', 'health_conditions', 'Visitors with Patient', 'Insurance', 'Admission_Deposit', 'Stay (in days)']
 

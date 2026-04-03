@@ -44,7 +44,7 @@ OUTPUT
 
     # Save the cleaned DataFrame to a timestamped CSV
     try:
-      self.df_final.to_csv(f'{self.output_dir}/cleaned_{self.report_time.strftime("%Y-%m-%d_%H-%M-%S")}.csv', index=False)
+      self.df_final.to_csv(f'{self.output_dir}cleaned_{self.report_time.strftime("%Y-%m-%d_%H-%M-%S")}.csv', index=False)
     except Exception as e:
       raise ValueError(f'Failed to save CSV: {e}')
     
