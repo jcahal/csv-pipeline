@@ -2,7 +2,7 @@
 
 ## Description
 
-A simple data pipeline built in Python. It loads a CSV, cleans and normalizes the data, and writes the output along with a summary report. Built as a hands-on project to practice Python class design, pandas, and CLI tooling.
+A simple data pipeline built in Python. It loads a CSV, cleans and normalizes the data, and writes the output along with a terminal summary report. Built as a hands-on project to practice Python class design, pandas, and CLI tooling.
 
 ## App Structure
 ```
@@ -13,7 +13,7 @@ csv-pipeline/
 │   ├── transformer.py
 │   └── reporter.py
 ├── data/
-│   └── sample.csv
+│   └── healthcare_data.csv
 ├── output/
 ├── config.py
 ├── main.py
@@ -24,13 +24,13 @@ csv-pipeline/
 ## Classes
 
 ### DataLoader
-Reads and validates a CSV file. Checks the file extension and verifies the header columns match what's expected before loading it into a DataFrame.
+Reads and validates a CSV file. Checks the file extension and verifies the header columns match what's defined in `config.py` before loading it into a DataFrame.
 
 ### DataTransformer
-Cleans the DataFrame. Optionally drops rows with null values and normalizes numeric columns using min-max scaling. Encodes categorical columns using one-hot and ordinal encoding.
+Cleans the DataFrame based on flags passed at runtime. Optionally drops rows with null values, min-max scales numeric columns, and encodes categoricals — one-hot for nominal columns, ordinal for ordered ones. Column config is defined in `config.py`.
 
 ### Reporter
-Prints a summary of what changed (row counts, nulls dropped, columns before/after), appends it to a log file, and saves the cleaned DataFrame as a timestamped CSV in the output directory.
+Builds a Rich summary table of pipeline stats (row counts, drops, features encoded), appends a plain text version to a log file, and saves the cleaned DataFrame as a timestamped CSV in the output directory.
 
 ## Usage
 
@@ -46,12 +46,12 @@ python main.py
 
 With flags:
 ```bash
-python main.py -i data/sample.csv -o output/ -d -n
+python main.py -i data/healthcare_data.csv -o output/ -d -n
 ```
 
 | Flag | Description |
 |------|-------------|
-| `-i` | Path to input CSV (default: `data/sample.csv`) |
+| `-i` | Path to input CSV (default: `data/healthcare_data.csv`) |
 | `-o` | Output directory (default: `output/`) |
 | `-d` | Drop rows with null values |
 | `-n` | Normalize and encode columns |

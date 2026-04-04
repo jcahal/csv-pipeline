@@ -8,18 +8,7 @@ class DataTransformer:
     self.drop_na = drop_na
     self.normalize = normalize
 
-  def transform(self):
-    # Drop nulls if flagged
-    if self.drop_na:
-      self = self.drop_nulls()
-    
-    # Normalize if flagged
-    if self.normalize:
-      self = self.normalize_numeric_columns().encode_categoricals()
-    
-    return self.df
-
-  def drop_nulls(self):
+  def _drop_nulls(self):
     # Drop any rows with missing values
     try:
       self.df = self.df.dropna().copy() # explicit .copy() to quell warning
@@ -29,7 +18,7 @@ class DataTransformer:
     
     return self
 
-  def normalize_numeric_columns(self):
+  def _normalize_numeric_columns(self):
     # Min-max scale numeric features to [0, 1]
     try:
       for col in config.NUMERICAL_COLS:
@@ -42,7 +31,7 @@ class DataTransformer:
     
     return self
 
-  def encode_categoricals(self):
+  def _encode_categoricals(self):
     # One-hot encode nominal columns
     try:
       one_hot_encoding = config.ONE_HOT_ENCODING
@@ -52,7 +41,7 @@ class DataTransformer:
       except Exception as e:
         raise ValueError(f'Failed to one-hot encoding: {e}')
 
-      # Ordinal encode plan_type — order matters here (Basic < Standard < Premium < Enterprise)
+      # Ordinal encode — order defined in config.ORDINAL_ENCODING
       ordinal_encoding = config.ORDINAL_ENCODING
 
       for col in ordinal_encoding.keys():
@@ -65,3 +54,14 @@ class DataTransformer:
       raise ValueError(f'Failed to ordinal encoding: {e}')
 
     return self
+  
+  def transform(self):
+    # Drop nulls if flagged
+    if self.drop_na:
+      self = self._drop_nulls()
+    
+    # Normalize if flagged
+    if self.normalize:
+      self = self._normalize_numeric_columns()._encode_categoricals()
+    
+    return self.df
